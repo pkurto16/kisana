@@ -70,3 +70,29 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.diamond-shape {
+  width: 160px;
+  height: 160px;
+  transform: rotate(45deg);
+}
+.diamond-shape > * {
+  transform: rotate(-45deg);
+}
+
+.hex-shape {
+  clip-path: polygon(
+          25% 0%, 75% 0%,
+          100% 50%, 75% 100%,
+          25% 100%, 0% 50%
+  );
+}
+
+.octo-shape {
+  clip-path: polygon(
+          30% 0%, 70% 0%,
+          100% 30%, 100% 70%,
+          70% 100%, 30% 100%,
+          0% 70%, 0% 30%
+  );
+}

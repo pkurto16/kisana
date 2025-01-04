@@ -1,0 +1,728 @@
+[
+  {
+    "id": "coreAgent",
+    "label": "Core Agent",
+    "icon": "Cpu",
+    "color": "#1e293b",
+    "shape": "hex",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "User Input",
+        "color": "#0ea5e9",
+        "direction": "input",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Action Output",
+        "color": "#38bdf8",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "agentName": "MainBrain",
+      "logLevel": "info",
+      "memoryLimitMB": 512,
+      "concurrency": 2,
+      "enableAutoScaling": false,
+      "scalingThreshold": 80
+    },
+    "fields": [
+      {
+        "name": "agentName",
+        "label": "Agent Name",
+        "type": "text",
+        "description": "Logical name for the core agent."
+      },
+      {
+        "name": "logLevel",
+        "label": "Log Level",
+        "type": "text",
+        "description": "Logging verbosity (e.g. debug, info, warn, error)."
+      },
+      {
+        "name": "memoryLimitMB",
+        "label": "Memory Limit (MB)",
+        "type": "number",
+        "description": "Maximum memory usage before throttling or shutdown."
+      },
+      {
+        "name": "concurrency",
+        "label": "Max Concurrency",
+        "type": "number",
+        "description": "Maximum number of concurrent operations the agent can run."
+      },
+      {
+        "name": "enableAutoScaling",
+        "label": "Auto-Scaling Enabled",
+        "type": "boolean",
+        "description": "Whether this agent can spawn additional worker processes."
+      },
+      {
+        "name": "scalingThreshold",
+        "label": "Auto-Scaling Threshold (%)",
+        "type": "number",
+        "description": "CPU usage threshold that triggers additional agent processes."
+      }
+    ]
+  },
+  {
+    "id": "unix",
+    "label": "UNIX System",
+    "icon": "Terminal",
+    "color": "#7c3aed",
+    "shape": "roundedRect",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Agent Input",
+        "color": "#c084fc",
+        "direction": "input",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "File Access",
+        "color": "#8b5cf6",
+        "direction": "output",
+        "type": "file"
+      },
+      {
+        "id": "out-2",
+        "label": "Log Output",
+        "color": "#a78bfa",
+        "direction": "output",
+        "type": "log"
+      }
+    ],
+    "defaultConfig": {
+      "version": "Ubuntu 20.04",
+      "hasRootAccess": false,
+      "packages": ["curl", "wget"],
+      "firewallEnabled": true,
+      "allowedServices": ["ssh", "http"],
+      "timezone": "UTC",
+      "maxProcesses": 1000,
+      "userManagement": {
+        "defaultUser": "agentUser",
+        "homeDirectory": "/home/agentUser"
+      }
+    },
+    "fields": [
+      {
+        "name": "version",
+        "label": "OS Version",
+        "type": "text",
+        "description": "Distribution and version of the Unix environment."
+      },
+      {
+        "name": "hasRootAccess",
+        "label": "Root Access?",
+        "type": "boolean",
+        "description": "If true, the agent can run commands with root privileges."
+      },
+      {
+        "name": "packages",
+        "label": "Installed Packages",
+        "type": "text",
+        "description": "List of additional packages available in the environment."
+      },
+      {
+        "name": "firewallEnabled",
+        "label": "Firewall Enabled",
+        "type": "boolean",
+        "description": "Toggle whether a built-in firewall is active."
+      },
+      {
+        "name": "allowedServices",
+        "label": "Allowed Services",
+        "type": "text",
+        "description": "Firewall exceptions for specific inbound/outbound services."
+      },
+      {
+        "name": "timezone",
+        "label": "System Timezone",
+        "type": "text",
+        "description": "Sets the system’s default timezone (e.g., UTC, PST)."
+      },
+      {
+        "name": "maxProcesses",
+        "label": "Max Processes",
+        "type": "number",
+        "description": "Limits the number of concurrent processes the system can spawn."
+      },
+      {
+        "name": "userManagement",
+        "label": "User Management",
+        "type": "text",
+        "description": "JSON or YAML specifying default user, home directories, etc."
+      }
+    ]
+  },
+  {
+    "id": "api",
+    "label": "API Connector",
+    "icon": "Globe",
+    "color": "#eab308",
+    "shape": "diamond",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Request",
+        "color": "#fde047",
+        "direction": "input",
+        "required": true,
+        "type": "json"
+      },
+      {
+        "id": "out-1",
+        "label": "Response",
+        "color": "#facc15",
+        "direction": "output",
+        "type": "json"
+      }
+    ],
+    "defaultConfig": {
+      "endpoint": "https://example.com/api",
+      "method": "GET",
+      "headers": {"Content-Type": "application/json"},
+      "authType": "none",
+      "authToken": "",
+      "timeoutSeconds": 30,
+      "retryCount": 3,
+      "rateLimitPerMinute": 60
+    },
+    "fields": [
+      {
+        "name": "endpoint",
+        "label": "Endpoint URL",
+        "type": "text",
+        "description": "Target API base URL or endpoint."
+      },
+      {
+        "name": "method",
+        "label": "HTTP Method",
+        "type": "text",
+        "description": "GET, POST, PUT, PATCH, DELETE, etc."
+      },
+      {
+        "name": "headers",
+        "label": "Headers",
+        "type": "text",
+        "description": "JSON object for request headers."
+      },
+      {
+        "name": "authType",
+        "label": "Auth Type",
+        "type": "text",
+        "description": "none, bearer, basic, or custom method."
+      },
+      {
+        "name": "authToken",
+        "label": "Auth Token",
+        "type": "text",
+        "description": "Token or credentials used for authentication."
+      },
+      {
+        "name": "timeoutSeconds",
+        "label": "Timeout (s)",
+        "type": "number",
+        "description": "Max time to wait before request is aborted."
+      },
+      {
+        "name": "retryCount",
+        "label": "Retry Attempts",
+        "type": "number",
+        "description": "Number of times to retry a failed request."
+      },
+      {
+        "name": "rateLimitPerMinute",
+        "label": "Rate Limit (req/min)",
+        "type": "number",
+        "description": "Maximum requests per minute."
+      }
+    ]
+  },
+  {
+    "id": "vectordb",
+    "label": "Vector DB",
+    "icon": "Database",
+    "color": "#16a34a",
+    "shape": "hex",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Query",
+        "color": "#86efac",
+        "direction": "input",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Results",
+        "color": "#4ade80",
+        "direction": "output",
+        "type": "json"
+      }
+    ],
+    "defaultConfig": {
+      "indexName": "default-index",
+      "dimension": 1536,
+      "approximateSearch": true,
+      "shardCount": 3,
+      "replicationFactor": 2,
+      "distanceMetric": "cosine",
+      "cacheQueries": false
+    },
+    "fields": [
+      {
+        "name": "indexName",
+        "label": "Index Name",
+        "type": "text",
+        "description": "Logical name of the vector index."
+      },
+      {
+        "name": "dimension",
+        "label": "Dimensions",
+        "type": "number",
+        "description": "Size of the embedding vector (e.g., 1536)."
+      },
+      {
+        "name": "approximateSearch",
+        "label": "Approximate Search?",
+        "type": "boolean",
+        "description": "If true, uses approximate nearest-neighbor for speed."
+      },
+      {
+        "name": "shardCount",
+        "label": "Shard Count",
+        "type": "number",
+        "description": "How many shards the DB is split into."
+      },
+      {
+        "name": "replicationFactor",
+        "label": "Replication Factor",
+        "type": "number",
+        "description": "Number of replicas for data redundancy."
+      },
+      {
+        "name": "distanceMetric",
+        "label": "Distance Metric",
+        "type": "text",
+        "description": "cosine, dot_product, euclidean, etc."
+      },
+      {
+        "name": "cacheQueries",
+        "label": "Cache Queries?",
+        "type": "boolean",
+        "description": "Caches repeated queries in memory for speed."
+      }
+    ]
+  },
+  {
+    "id": "customML",
+    "label": "Custom ML Model",
+    "icon": "Brain",
+    "color": "#db2777",
+    "shape": "octo",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Input Data",
+        "color": "#f9a8d4",
+        "direction": "input",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Inference",
+        "color": "#ec4899",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "modelName": "GPT-like",
+      "maxTokens": 1024,
+      "temperature": 0.7,
+      "topP": 0.9,
+      "beamSearch": false,
+      "useGPU": true
+    },
+    "fields": [
+      {
+        "name": "modelName",
+        "label": "Model Name",
+        "type": "text",
+        "description": "Identifier for the ML model architecture."
+      },
+      {
+        "name": "maxTokens",
+        "label": "Max Tokens",
+        "type": "number",
+        "description": "Maximum tokens to generate or process at once."
+      },
+      {
+        "name": "temperature",
+        "label": "Temperature",
+        "type": "number",
+        "description": "Randomness factor in generation."
+      },
+      {
+        "name": "topP",
+        "label": "Top P",
+        "type": "number",
+        "description": "Controls nucleus sampling for the output generation."
+      },
+      {
+        "name": "beamSearch",
+        "label": "Use Beam Search?",
+        "type": "boolean",
+        "description": "If true, uses beam search decoding instead of sampling."
+      },
+      {
+        "name": "useGPU",
+        "label": "Use GPU?",
+        "type": "boolean",
+        "description": "Enables GPU acceleration if available."
+      }
+    ]
+  },
+  {
+    "id": "agentFunction",
+    "label": "Agent Sub-Function",
+    "icon": "Zap",
+    "color": "#2563eb",
+    "shape": "circle",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Trigger",
+        "color": "#60a5fa",
+        "direction": "input",
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Response",
+        "color": "#3b82f6",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "functionName": "subAgent",
+      "concurrency": 1,
+      "enableLogging": false,
+      "timeoutMs": 5000,
+      "contextSharing": false
+    },
+    "fields": [
+      {
+        "name": "functionName",
+        "label": "Function Name",
+        "type": "text",
+        "description": "Unique identifier for this sub-function."
+      },
+      {
+        "name": "concurrency",
+        "label": "Concurrency",
+        "type": "number",
+        "description": "Number of parallel executions allowed."
+      },
+      {
+        "name": "enableLogging",
+        "label": "Logging Enabled",
+        "type": "boolean",
+        "description": "Toggle debug/trace logging for this function."
+      },
+      {
+        "name": "timeoutMs",
+        "label": "Timeout (ms)",
+        "type": "number",
+        "description": "Maximum execution time before the sub-function is aborted."
+      },
+      {
+        "name": "contextSharing",
+        "label": "Context Sharing",
+        "type": "boolean",
+        "description": "If true, shares memory or state with the parent agent."
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "label": "Network Access",
+    "icon": "Network",
+    "color": "#dc2626",
+    "shape": "roundedRect",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Permission",
+        "color": "#f87171",
+        "direction": "input",
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Connection",
+        "color": "#ef4444",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "allowedDomains": ["*"],
+      "useTLS": true,
+      "portRestrictions": [80, 443],
+      "proxyEnabled": false,
+      "proxyURL": "",
+      "timeoutSeconds": 10
+    },
+    "fields": [
+      {
+        "name": "allowedDomains",
+        "label": "Allowed Domains",
+        "type": "text",
+        "description": "List of domains or IPs allowed for network calls."
+      },
+      {
+        "name": "useTLS",
+        "label": "Use TLS",
+        "type": "boolean",
+        "description": "Whether secure TLS/SSL connections are required."
+      },
+      {
+        "name": "portRestrictions",
+        "label": "Port Restrictions",
+        "type": "text",
+        "description": "List of ports that are open or restricted."
+      },
+      {
+        "name": "proxyEnabled",
+        "label": "Proxy Enabled",
+        "type": "boolean",
+        "description": "If true, all traffic goes through the specified proxy."
+      },
+      {
+        "name": "proxyURL",
+        "label": "Proxy URL",
+        "type": "text",
+        "description": "If proxy is enabled, the URL or IP of the proxy server."
+      },
+      {
+        "name": "timeoutSeconds",
+        "label": "Timeout (s)",
+        "type": "number",
+        "description": "Max time for any network request before failure."
+      }
+    ]
+  },
+  {
+    "id": "storage",
+    "label": "File Storage",
+    "icon": "FolderCog",
+    "color": "#0ea5e9",
+    "shape": "roundedRect",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Save File",
+        "color": "#38bdf8",
+        "direction": "input",
+        "type": "file"
+      },
+      {
+        "id": "out-1",
+        "label": "File URI",
+        "color": "#0ea5e9",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "folderPath": "/data/",
+      "maxSizeMB": 100,
+      "storageType": "local",
+      "encryptionEnabled": false,
+      "retentionDays": 30,
+      "filePermissions": "rw-r--r--"
+    },
+    "fields": [
+      {
+        "name": "folderPath",
+        "label": "Folder Path",
+        "type": "text",
+        "description": "Root directory where files are stored."
+      },
+      {
+        "name": "maxSizeMB",
+        "label": "Max Size (MB)",
+        "type": "number",
+        "description": "Maximum capacity for this storage location."
+      },
+      {
+        "name": "storageType",
+        "label": "Storage Type",
+        "type": "text",
+        "description": "local, cloud, distributed, etc."
+      },
+      {
+        "name": "encryptionEnabled",
+        "label": "Encrypt Files?",
+        "type": "boolean",
+        "description": "If true, all data is written with encryption at rest."
+      },
+      {
+        "name": "retentionDays",
+        "label": "Retention (days)",
+        "type": "number",
+        "description": "How many days to keep files before deletion or archiving."
+      },
+      {
+        "name": "filePermissions",
+        "label": "File Permissions",
+        "type": "text",
+        "description": "Default Unix-like permissions for newly stored files."
+      }
+    ]
+  },
+  {
+    "id": "security",
+    "label": "Security Check",
+    "icon": "ShieldAlert",
+    "color": "#f97316",
+    "shape": "diamond",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "Data In",
+        "color": "#fdba74",
+        "direction": "input",
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Safe Out",
+        "color": "#fb923c",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "threatLevel": "medium",
+      "blockUnauthorized": true,
+      "quarantineSuspicious": false,
+      "scanMode": "heuristic",
+      "scanDepth": 3
+    },
+    "fields": [
+      {
+        "name": "threatLevel",
+        "label": "Threat Level",
+        "type": "text",
+        "description": "low, medium, high for the current environment risk."
+      },
+      {
+        "name": "blockUnauthorized",
+        "label": "Block Unauthorized",
+        "type": "boolean",
+        "description": "Deny or discard unknown/untrusted data payloads."
+      },
+      {
+        "name": "quarantineSuspicious",
+        "label": "Quarantine Suspicious?",
+        "type": "boolean",
+        "description": "Isolate suspicious data for later inspection."
+      },
+      {
+        "name": "scanMode",
+        "label": "Scan Mode",
+        "type": "text",
+        "description": "signature, heuristic, or AI-based scanning approach."
+      },
+      {
+        "name": "scanDepth",
+        "label": "Scan Depth",
+        "type": "number",
+        "description": "How many nested levels to inspect in inbound data."
+      }
+    ]
+  },
+  {
+    "id": "bot",
+    "label": "Bot Service",
+    "icon": "Bot",
+    "color": "#84cc16",
+    "shape": "circle",
+    "ports": [
+      {
+        "id": "in-1",
+        "label": "User Message",
+        "color": "#bef264",
+        "direction": "input",
+        "type": "text"
+      },
+      {
+        "id": "out-1",
+        "label": "Bot Reply",
+        "color": "#a3e635",
+        "direction": "output",
+        "type": "text"
+      }
+    ],
+    "defaultConfig": {
+      "persona": "friendly",
+      "language": "en",
+      "useEmojis": false,
+      "autoTranslate": false,
+      "maxResponseLength": 200,
+      "typingDelayMs": 500
+    },
+    "fields": [
+      {
+        "name": "persona",
+        "label": "Bot Persona",
+        "type": "text",
+        "description": "friendly, formal, snarky, etc."
+      },
+      {
+        "name": "language",
+        "label": "Language",
+        "type": "text",
+        "description": "Primary language for responses."
+      },
+      {
+        "name": "useEmojis",
+        "label": "Use Emojis?",
+        "type": "boolean",
+        "description": "Enables emojis in textual responses."
+      },
+      {
+        "name": "autoTranslate",
+        "label": "Auto-Translate?",
+        "type": "boolean",
+        "description": "Translate user messages to the default language if needed."
+      },
+      {
+        "name": "maxResponseLength",
+        "label": "Max Response Length",
+        "type": "number",
+        "description": "Limit on the number of characters in a single reply."
+      },
+      {
+        "name": "typingDelayMs",
+        "label": "Typing Delay (ms)",
+        "type": "number",
+        "description": "Simulates typing delay before sending a response."
+      }
+    ]
+  }
+]
